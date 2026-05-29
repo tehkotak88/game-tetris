@@ -10,19 +10,35 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Modal Input Name -->
+    <div id="name-modal" class="modal">
+        <div class="modal-content">
+            <img src="logo.svg" alt="Tetris Logo" class="modal-logo">
+            <h2>ENTER YOUR NAME</h2>
+            <input type="text" id="player-name-input" maxlength="10" placeholder="Player1">
+            <button id="save-name-btn">START GAME</button>
+        </div>
+    </div>
+
     <div class="game-container">
         <canvas id="tetris" width="240" height="400"></canvas>
         <div class="side-panel">
             <div class="title-container">
-                <h1>TETRIS</h1>
+                <img src="logo.svg" alt="Tetris Logo" class="side-logo">
+            </div>
+            <div class="player-info">
+                <div class="score-label">PLAYER</div>
+                <div id="display-name" class="score-value">Unknown</div>
             </div>
             <div class="score-box">
                 <div class="score-label">SCORE</div>
                 <div id="score" class="score-value">0</div>
             </div>
             <div class="score-box high-score-box">
-                <div class="score-label">HIGH SCORE</div>
-                <div id="high-score" class="score-value">0</div>
+                <div class="score-label">TOP SCORES</div>
+                <ul id="leaderboard-list">
+                    <!-- Leaderboard items injected via JS -->
+                </ul>
             </div>
             <button id="start-btn">PLAY</button>
         </div>

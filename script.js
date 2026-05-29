@@ -113,12 +113,53 @@ function drawMatrix(matrix, offset) {
     });
 }
 
+function drawGrid() {
+    context.strokeStyle = '#222';
+    context.lineWidth = 0.05;
+    for (let x = 0; x < canvas.width / 20; x++) {
+        context.beginPath();
+        context.moveTo(x, 0);
+        context.lineTo(x, canvas.height / 20);
+        context.stroke();
+    }
+    for (let y = 0; y < canvas.height / 20; y++) {
+        context.beginPath();
+        context.moveTo(0, y);
+        context.lineTo(canvas.width / 20, y);
+        context.stroke();
+    }
+}
+
+function getGhostPos() {
+    const ghost = {
+        matrix: player.matrix,
+        pos: { x: player.pos.x, y: player.pos.y }
+    };
+    while (!collide(arena, ghost)) {
+        ghost.pos.y++;
+    }
+    ghost.pos.y--;
+    return ghost.pos;
+}
+
+function drawGhost() {
+    const ghostPos = getGhostPos();
+    context.globalAlpha = 0.2;
+    drawMatrix(player.matrix, ghostPos);
+    context.globalAlpha = 1.0;
+}
+
 function draw() {
     context.fillStyle = '#000';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
+    drawGrid();
     drawMatrix(arena, {x: 0, y: 0});
-    drawMatrix(player.matrix, player.pos);
+
+    if (player.matrix) {
+        drawGhost();
+        drawMatrix(player.matrix, player.pos);
+    }
 }
 
 function merge(arena, player) {
@@ -159,9 +200,12 @@ function playerReset() {
 
     // Game Over
     if (collide(arena, player)) {
+        saveScore();
         arena.forEach(row => row.fill(0));
         player.score = 0;
         updateScore();
+        isPlaying = false;
+        document.getElementById('name-modal').style.display = 'flex'; // Show modal again
     }
 }
 
@@ -205,6 +249,28 @@ let dropInterval = 1000;
 
 let lastTime = 0;
 let isPlaying = false;
+let playerName = 'Player1';
+let leaderboard = JSON.parse(localStorage.getItem('tetrisLeaderboard')) || [];
+
+function saveScore() {
+    if (player.score > 0) {
+        leaderboard.push({ name: playerName, score: player.score });
+        leaderboard.sort((a, b) => b.score - a.score);
+        leaderboard = leaderboard.slice(0, 5); // Keep top 5
+        localStorage.setItem('tetrisLeaderboard', JSON.stringify(leaderboard));
+        updateLeaderboardDisplay();
+    }
+}
+
+function updateLeaderboardDisplay() {
+    const list = document.getElementById('leaderboard-list');
+    list.innerHTML = '';
+    leaderboard.forEach((entry, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${index + 1}. ${entry.name}</span> <span>${entry.score}</span>`;
+        list.appendChild(li);
+    });
+}
 
 function update(time = 0) {
     if (!isPlaying) return;
@@ -223,11 +289,6 @@ function update(time = 0) {
 
 function updateScore() {
     document.getElementById('score').innerText = player.score;
-    if (player.score > highScore) {
-        highScore = player.score;
-        localStorage.setItem('tetrisHighScore', highScore);
-        document.getElementById('high-score').innerText = highScore;
-    }
 }
 
 const arena = createMatrix(12, 20);
@@ -238,8 +299,7 @@ const player = {
     score: 0,
 };
 
-let highScore = localStorage.getItem('tetrisHighScore') || 0;
-document.getElementById('high-score').innerText = highScore;
+updateLeaderboardDisplay();
 
 document.addEventListener('keydown', event => {
     if (!isPlaying) return;
@@ -255,21 +315,33 @@ document.addEventListener('keydown', event => {
     }
 });
 
-document.getElementById('start-btn').addEventListener('click', () => {
+document.getElementById('save-name-btn').addEventListener('click', () => {
+    const inputName = document.getElementById('player-name-input').value.trim();
+    if (inputName) {
+        playerName = inputName.toUpperCase();
+    }
+    document.getElementById('display-name').innerText = playerName;
+    document.getElementById('name-modal').style.display = 'none';
+
     if (!isPlaying) {
+        arena.forEach(row => row.fill(0));
+        player.score = 0;
         isPlaying = true;
         playerReset();
         updateScore();
         update();
-    } else {
-        arena.forEach(row => row.fill(0));
-        player.score = 0;
-        playerReset();
-        updateScore();
     }
 });
 
-// Initial draw
-playerReset();
+document.getElementById('start-btn').addEventListener('click', () => {
+    if (isPlaying) {
+        saveScore();
+    }
+    arena.forEach(row => row.fill(0));
+    player.score = 0;
+    isPlaying = false;
+    document.getElementById('name-modal').style.display = 'flex';
+});
+
+// Initial setup
 draw();
-updateScore();
