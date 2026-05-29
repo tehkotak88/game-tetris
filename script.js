@@ -223,6 +223,11 @@ function update(time = 0) {
 
 function updateScore() {
     document.getElementById('score').innerText = player.score;
+    if (player.score > highScore) {
+        highScore = player.score;
+        localStorage.setItem('tetrisHighScore', highScore);
+        document.getElementById('high-score').innerText = highScore;
+    }
 }
 
 const arena = createMatrix(12, 20);
@@ -232,6 +237,9 @@ const player = {
     matrix: null,
     score: 0,
 };
+
+let highScore = localStorage.getItem('tetrisHighScore') || 0;
+document.getElementById('high-score').innerText = highScore;
 
 document.addEventListener('keydown', event => {
     if (!isPlaying) return;
