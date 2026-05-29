@@ -75,6 +75,14 @@ canvas {
     font-size: 20px;
     color: #0ff;
     text-shadow: 0 0 5px #0ff;
+    transition: transform 0.1s ease-out, text-shadow 0.1s ease-out;
+    display: inline-block;
+}
+
+.score-animate {
+    transform: scale(1.5);
+    text-shadow: 0 0 20px #fff, 0 0 30px #0ff, 0 0 40px #0ff;
+    color: #fff;
 }
 
 #leaderboard-list {
@@ -175,6 +183,36 @@ button:active {
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
+/* Watermark Styling */
+.watermark {
+    margin-top: 15px;
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.4);
+    text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 0 2px rgba(0, 255, 255, 0.3);
+}
+
+/* Modal Animation */
+.modal-content {
+    background-color: #1a1a24;
+    padding: 40px;
+    border-radius: 15px;
+    border: 2px solid #0ff;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    animation: modalPopIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPopIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
 /* Mobile Controls Styling */
 .mobile-controls {
     display: none;
@@ -193,23 +231,32 @@ button:active {
 
 .ctrl-btn {
     flex: 1;
-    padding: 20px 0;
-    font-size: 16px;
-    background-color: #222;
+    padding: 15px 0;
+    font-size: 20px;
+    font-family: 'Press Start 2P', cursive;
+    background-color: rgba(0, 255, 255, 0.1);
     color: #0ff;
     border: 2px solid #0ff;
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.1);
-    text-shadow: 0 0 5px #0ff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.2);
+    text-shadow: 0 0 8px #0ff;
     margin-top: 0;
+    transition: all 0.1s ease;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .ctrl-btn:active {
-    background-color: #0ff;
-    color: #000;
+    background-color: rgba(0, 255, 255, 0.6);
+    color: #fff;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+    transform: scale(0.95);
 }
 
 #btn-up {
     flex: 0 0 100%;
+    font-size: 14px;
+    padding: 20px 0;
 }
 
 /* Responsive Design */

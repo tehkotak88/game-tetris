@@ -30,7 +30,16 @@ function arenaSweep() {
 
         player.score += rowCount * 10;
         rowCount *= 2;
+        animateScore();
     }
+}
+
+function animateScore() {
+    const scoreElement = document.getElementById('score');
+    scoreElement.classList.add('score-animate');
+    setTimeout(() => {
+        scoreElement.classList.remove('score-animate');
+    }, 150);
 }
 
 function collide(arena, player) {
