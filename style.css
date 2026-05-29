@@ -3,18 +3,20 @@ body {
     color: #fff;
     font-family: 'Press Start 2P', cursive;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     overflow: hidden;
+    touch-action: none; /* Prevent browser handling of gestures like pinch zoom */
 }
 
 .game-container {
     display: flex;
     gap: 30px;
     background-color: #1a1a24;
-    padding: 30px;
+    padding: 20px;
     border-radius: 15px;
     box-shadow: 0 0 30px rgba(0, 255, 255, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.8);
     border: 2px solid #333;
@@ -171,4 +173,126 @@ button:active {
 #player-name-input:focus {
     border-color: #0ff;
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Mobile Controls Styling */
+.mobile-controls {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.control-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.ctrl-btn {
+    flex: 1;
+    padding: 20px 0;
+    font-size: 16px;
+    background-color: #222;
+    color: #0ff;
+    border: 2px solid #0ff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.1);
+    text-shadow: 0 0 5px #0ff;
+    margin-top: 0;
+}
+
+.ctrl-btn:active {
+    background-color: #0ff;
+    color: #000;
+}
+
+#btn-up {
+    flex: 0 0 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .game-container {
+        flex-direction: column;
+        padding: 10px;
+        gap: 15px;
+        border-radius: 10px;
+        box-shadow: none;
+        border: none;
+        width: 95%;
+        max-width: 320px;
+    }
+
+    canvas {
+        width: 100%;
+        max-width: 240px;
+        height: auto;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .side-panel {
+        min-width: unset;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 10px;
+    }
+
+    .title-container, .player-info {
+        width: 100%;
+    }
+
+    .side-logo {
+        max-width: 150px;
+    }
+
+    .score-box {
+        flex: 1;
+        min-width: 120px;
+        padding: 10px;
+    }
+
+    .high-score-box {
+        width: 100%;
+        flex: unset;
+    }
+
+    button#start-btn {
+        width: 100%;
+    }
+
+    .mobile-controls {
+        display: flex;
+    }
+}
+
+@media (max-height: 700px) and (max-width: 768px) {
+    /* For smaller height phones to ensure everything fits */
+    .game-container {
+        gap: 5px;
+        padding: 5px;
+    }
+
+    .side-panel {
+        gap: 5px;
+    }
+
+    .score-box {
+        padding: 5px;
+    }
+
+    .ctrl-btn {
+        padding: 15px 0;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    canvas {
+        max-width: 200px;
+    }
 }

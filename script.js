@@ -315,6 +315,34 @@ document.addEventListener('keydown', event => {
     }
 });
 
+// Mobile Controls
+function setupMobileControls() {
+    const btnLeft = document.getElementById('btn-left');
+    const btnRight = document.getElementById('btn-right');
+    const btnDown = document.getElementById('btn-down');
+    const btnUp = document.getElementById('btn-up');
+
+    // Helper to handle both touch and mouse events
+    function addPressEvent(element, action) {
+        element.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (isPlaying) action();
+        }, {passive: false});
+
+        element.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            if (isPlaying) action();
+        });
+    }
+
+    addPressEvent(btnLeft, () => playerMove(-1));
+    addPressEvent(btnRight, () => playerMove(1));
+    addPressEvent(btnDown, () => playerDrop());
+    addPressEvent(btnUp, () => playerRotate(1));
+}
+
+setupMobileControls();
+
 document.getElementById('save-name-btn').addEventListener('click', () => {
     const inputName = document.getElementById('player-name-input').value.trim();
     if (inputName) {

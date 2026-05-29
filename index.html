@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Neon Tetris</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,6 +43,19 @@
             <button id="start-btn">PLAY</button>
         </div>
     </div>
+
+    <!-- Mobile Controls -->
+    <div id="mobile-controls" class="mobile-controls">
+        <div class="control-row">
+            <button id="btn-up" class="ctrl-btn">ROTATE</button>
+        </div>
+        <div class="control-row">
+            <button id="btn-left" class="ctrl-btn">&larr;</button>
+            <button id="btn-down" class="ctrl-btn">&darr;</button>
+            <button id="btn-right" class="ctrl-btn">&rarr;</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
