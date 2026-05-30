@@ -1,5 +1,7 @@
 body {
-    background-color: #0f0f13;
+    background: linear-gradient(135deg, #0f0f13, #1a0033, #001a33, #0f0f13);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
     color: #fff;
     font-family: 'Press Start 2P', cursive;
     display: flex;
@@ -12,14 +14,22 @@ body {
     touch-action: none; /* Prevent browser handling of gestures like pinch zoom */
 }
 
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 .game-container {
     display: flex;
     gap: 30px;
-    background-color: #1a1a24;
+    background: rgba(26, 26, 36, 0.85); /* Slightly transparent to show animated BG */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.8);
-    border: 2px solid #333;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.25), inset 0 0 20px rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(0, 255, 255, 0.2);
 }
 
 canvas {
@@ -105,7 +115,7 @@ button {
     padding: 15px;
     font-family: 'Press Start 2P', cursive;
     font-size: 14px;
-    background-color: #transparent;
+    background-color: transparent;
     color: #0f0;
     border: 2px solid #0f0;
     border-radius: 8px;

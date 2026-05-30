@@ -30,6 +30,13 @@ function arenaSweep() {
             }
         }
 
+        // Spawn particles for each block in the row before removing
+        for (let x = 0; x < arena[y].length; ++x) {
+            if (arena[y][x] !== 0) {
+                spawnBlockExplosion(x, y, colors[arena[y][x]]);
+            }
+        }
+
         const row = arena.splice(y, 1)[0].fill(0);
         arena.unshift(row);
         ++y;
@@ -206,6 +213,54 @@ function drawGhost() {
     context.globalAlpha = 1.0;
 }
 
+// Particle System
+let particles = [];
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        // Random velocity
+        this.vx = (Math.random() - 0.5) * 0.8;
+        this.vy = (Math.random() - 1) * 0.8;
+        this.life = 1.0; // Starts at full opacity
+        this.decay = Math.random() * 0.02 + 0.02; // How fast it fades
+        this.size = Math.random() * 0.5 + 0.2;
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.05; // Gravity
+        this.life -= this.decay;
+    }
+
+    draw(ctx) {
+        if (this.life <= 0) return;
+        ctx.globalAlpha = this.life;
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.size, this.size);
+        ctx.globalAlpha = 1.0; // Reset alpha
+    }
+}
+
+function spawnBlockExplosion(x, y, color) {
+    // Spawn 8 particles per block
+    for (let i = 0; i < 8; i++) {
+        particles.push(new Particle(x + 0.5, y + 0.5, color));
+    }
+}
+
+function updateParticles() {
+    for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        if (particles[i].life <= 0) {
+            particles.splice(i, 1);
+        }
+    }
+}
+
 function draw() {
     context.fillStyle = '#000';
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -217,6 +272,9 @@ function draw() {
         drawGhost();
         drawMatrix(player.matrix, player.pos);
     }
+
+    // Draw Particles
+    particles.forEach(p => p.draw(context));
 }
 
 function merge(arena, player) {
@@ -326,7 +384,16 @@ function updateLeaderboardDisplay() {
     list.innerHTML = '';
     leaderboard.forEach((entry, index) => {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${index + 1}. ${entry.name}</span> <span>${entry.score}</span>`;
+
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = `${index + 1}. ${entry.name}`;
+
+        const scoreSpan = document.createElement('span');
+        scoreSpan.textContent = entry.score;
+
+        li.appendChild(nameSpan);
+        li.appendChild(document.createTextNode(' '));
+        li.appendChild(scoreSpan);
         list.appendChild(li);
     });
 }
@@ -342,6 +409,7 @@ function update(time = 0) {
         playerDrop();
     }
 
+    updateParticles();
     draw();
     requestAnimationFrame(update);
 }
