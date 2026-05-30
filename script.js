@@ -13,10 +13,16 @@ const colors = [
     '#FF8E0D', // I
     '#FFE138', // S
     '#3877FF', // Z
+    '#FF0000', // U (Red)
+    '#00FF00', // X (Green)
+    '#0000FF', // P (Blue)
+    '#FFFF00', // W (Yellow)
+    '#00FFFF', // C (Cyan)
 ];
 
 function arenaSweep() {
     let rowCount = 1;
+    let clearedRows = false;
     outer: for (let y = arena.length - 1; y > 0; --y) {
         for (let x = 0; x < arena[y].length; ++x) {
             if (arena[y][x] === 0) {
@@ -30,8 +36,20 @@ function arenaSweep() {
 
         player.score += rowCount * 10;
         rowCount *= 2;
-        animateScore();
+        clearedRows = true;
     }
+
+    if (clearedRows) {
+        animateScore();
+        animateRowClear();
+    }
+}
+
+function animateRowClear() {
+    canvas.classList.add('flash-canvas');
+    setTimeout(() => {
+        canvas.classList.remove('flash-canvas');
+    }, 200);
 }
 
 function animateScore() {
@@ -105,6 +123,36 @@ function createPiece(type) {
             [7, 7, 0],
             [0, 7, 7],
             [0, 0, 0],
+        ];
+    } else if (type === 'U') {
+        return [
+            [8, 0, 8],
+            [8, 8, 8],
+            [0, 0, 0],
+        ];
+    } else if (type === 'X') {
+        return [
+            [0, 9, 0],
+            [9, 9, 9],
+            [0, 9, 0],
+        ];
+    } else if (type === 'P') {
+        return [
+            [10, 10, 0],
+            [10, 10, 0],
+            [10,  0, 0],
+        ];
+    } else if (type === 'W') {
+        return [
+            [11,  0,  0],
+            [11, 11,  0],
+            [ 0, 11, 11],
+        ];
+    } else if (type === 'C') {
+        return [
+            [12, 12, 0],
+            [12,  0, 0],
+            [12, 12, 0],
         ];
     }
 }
@@ -200,21 +248,23 @@ function playerMove(dir) {
     }
 }
 
+function showGameOver() {
+    isPlaying = false;
+    saveScore();
+    document.getElementById('final-score').innerText = player.score;
+    document.getElementById('game-over-modal').style.display = 'flex';
+}
+
 function playerReset() {
-    const pieces = 'ILJOTSZ';
+    const pieces = 'ILJOTSZUXPWC';
     player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
     player.pos.y = 0;
     player.pos.x = (arena[0].length / 2 | 0) -
                    (player.matrix[0].length / 2 | 0);
 
-    // Game Over
+    // Game Over condition
     if (collide(arena, player)) {
-        saveScore();
-        arena.forEach(row => row.fill(0));
-        player.score = 0;
-        updateScore();
-        isPlaying = false;
-        document.getElementById('name-modal').style.display = 'flex'; // Show modal again
+        showGameOver();
     }
 }
 
@@ -377,6 +427,21 @@ document.getElementById('start-btn').addEventListener('click', () => {
     arena.forEach(row => row.fill(0));
     player.score = 0;
     isPlaying = false;
+    document.getElementById('name-modal').style.display = 'flex';
+});
+
+document.getElementById('play-again-btn').addEventListener('click', () => {
+    document.getElementById('game-over-modal').style.display = 'none';
+    arena.forEach(row => row.fill(0));
+    player.score = 0;
+    isPlaying = true;
+    playerReset();
+    updateScore();
+    update();
+});
+
+document.getElementById('change-name-btn').addEventListener('click', () => {
+    document.getElementById('game-over-modal').style.display = 'none';
     document.getElementById('name-modal').style.display = 'flex';
 });
 
