@@ -307,10 +307,15 @@ button:active {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    body {
+        justify-content: flex-start; /* Push content to the top instead of centering */
+        padding-top: 10px; /* Add safe area at the top */
+    }
+
     .game-container {
         flex-direction: column;
-        padding: 10px;
-        gap: 15px;
+        padding: 5px;
+        gap: 8px;
         border-radius: 10px;
         box-shadow: none;
         border: none;
@@ -320,7 +325,7 @@ button:active {
 
     canvas {
         width: 100%;
-        max-width: 240px;
+        max-width: 200px; /* Shrunk canvas to fit vertical screens */
         height: auto;
         margin: 0 auto;
         display: block;
@@ -331,21 +336,26 @@ button:active {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-around;
-        gap: 10px;
+        gap: 5px; /* Tighter spacing */
     }
 
     .title-container, .player-info {
         width: 100%;
+        padding-bottom: 5px; /* Tighter border */
     }
 
     .side-logo {
-        max-width: 150px;
+        max-width: 100px; /* Smaller logo */
     }
 
     .score-box {
         flex: 1;
-        min-width: 120px;
-        padding: 10px;
+        min-width: 100px;
+        padding: 8px; /* Tighter padding */
+    }
+
+    .score-value {
+        font-size: 16px; /* Smaller score font */
     }
 
     .high-score-box {
@@ -355,37 +365,39 @@ button:active {
 
     button#start-btn {
         width: 100%;
+        padding: 10px; /* Tighter button */
     }
 
     .mobile-controls {
         display: flex;
-    }
-}
-
-@media (max-height: 700px) and (max-width: 768px) {
-    /* For smaller height phones to ensure everything fits */
-    .game-container {
-        gap: 5px;
-        padding: 5px;
-    }
-
-    .side-panel {
-        gap: 5px;
-    }
-
-    .score-box {
-        padding: 5px;
+        margin-top: 5px; /* Tighter margin */
+        gap: 8px;
     }
 
     .ctrl-btn {
+        padding: 12px 0; /* Smaller control buttons */
+        font-size: 16px;
+    }
+
+    #btn-up {
         padding: 15px 0;
+        font-size: 12px;
     }
 
-    .modal-content {
-        padding: 20px;
+    .watermark {
+        margin-top: 5px;
+        margin-bottom: 10px;
     }
+}
 
+@media (max-height: 800px) and (max-width: 768px) {
+    /* For smaller height phones to ensure everything fits without scrolling */
     canvas {
-        max-width: 200px;
+        max-width: 170px; /* Even smaller canvas to prevent overflow */
+    }
+
+    .game-container {
+        gap: 4px;
+        padding: 2px;
     }
 }
